@@ -54,48 +54,8 @@ cartItems.forEach(item => {
       inputQuantity.setAttribute('min', '0');
       inputQuantity.setAttribute('max', '100');
       inputQuantity.setAttribute('value', '0');
-     
 
-// Ajout d'un événement pour détecter le changement de valeur de l'input
-inputQuantity.addEventListener('change', function() {
-  // Trouver l'élément cart__item parent de l'input
-  const cartItem = inputQuantity.closest('.cart__item');
-
-  // Récupérer l'index de l'objet item associé à l'élément cart__item
-  const itemIndex = getItemIndex(cartItem.dataset.id, cartItem.dataset.color);
-
-  // Récupérer l'objet item associé à l'élément cart__item
-  const item = cartItems[itemIndex];
-
-  // Convertir la valeur de l'input en nombre entier avec parseInt()
-  let newQuantity = parseInt(inputQuantity.value);
-
-  // Vérifier que la nouvelle quantité est valide
-  if (newQuantity >= 0 && newQuantity <= 100) {
-    // Ajouter la nouvelle quantité à la quantité déjà présente
-    item.quantity += newQuantity;
-    // Mettre à jour la quantité affichée dans l'interface
-    quantity.innerText = `Quantité : ${item.quantity}`;
-    // Mettre à jour le localStorage avec la nouvelle quantité
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  } else {
-    // Afficher un message d'erreur si la nouvelle quantité n'est pas valide
-    alert('La quantité doit être entre 0 et 100');
-  }
-});
-
-// Fonction pour récupérer l'index de l'objet correspondant à l'élément sélectionné
-function getItemIndex(productId, color) {
-  for (let i = 0; i < cartItems.length; i++) {
-    if (cartItems[i].productId === productId && cartItems[i].color === color) {
-      return i;
-    }
-  }
-  return -1;
-}
-    
-
-     const settingsDelete = document.createElement('div');
+      const settingsDelete = document.createElement('div');
      settingsDelete.classList.add('cart__item__content__settings__delete');
 
      const productDelete = document.createElement('p');
@@ -117,6 +77,65 @@ function getItemIndex(productId, color) {
       productQuantity.appendChild(inputQuantity);
       productSettings.appendChild(settingsDelete);
       settingsDelete.appendChild(productDelete);
+     
+
+// Ajout d'un événement pour détecter le changement de valeur de l'input
+inputQuantity.addEventListener('change', function() {
+  // Trouver l'élément cart__item parent de l'input
+  const cartItem = inputQuantity.closest('.cart__item');
+
+  // Récupérer l'index de l'objet item associé à l'élément cart__item
+  const itemIndex = getItemIndex(cartItem.dataset.id, cartItem.dataset.color);
+
+  // Récupérer l'objet item associé à l'élément cart__item
+  const item = cartItems[itemIndex];
+
+  // Convertir la valeur de l'input en nombre entier avec parseInt()
+  let newQuantity = parseInt(inputQuantity.value);
+
+  // Vérifier que la nouvelle quantité est valide
+  if (newQuantity >= 0 && newQuantity <= 100) {
+    // Ajouter la nouvelle quantité à la quantité déjà présente
+    item.quantity = newQuantity;
+    // Mettre à jour la quantité affichée dans l'interface
+    quantity.innerText = `Quantité : ${item.quantity}`;
+    // Mettre à jour le localStorage avec la nouvelle quantité
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  } else {
+    // Afficher un message d'erreur si la nouvelle quantité n'est pas valide
+    alert('La quantité doit être entre 0 et 100');
+  }
+});
+
+// Ajout d'un événement pour détecter le click sur le bouton supprimer
+productDelete.addEventListener('click', function() {
+  // Trouver l'élément cart__item parent de l'input
+  const cartItem = productDelete.closest('.cart__item');
+
+  // Récupérer l'index de l'objet item associé à l'élément cart__item
+  const itemIndex = getItemIndex(cartItem.dataset.id, cartItem.dataset.color);
+
+  // Supprimer l'objet item associé à l'élément cart__item
+  cartItems.splice(itemIndex, 1);
+
+    // Mettre à jour le localStorage avec la nouvelle quantité
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    cartSection.removeChild(cartItem);
+
+});
+
+// Fonction pour récupérer l'index de l'objet correspondant à l'élément sélectionné
+function getItemIndex(productId, color) {
+  for (let i = 0; i < cartItems.length; i++) {
+    if (cartItems[i].productId === productId && cartItems[i].color === color) {
+      return i;
+    }
+  }
+  return -1;
+}
+    
+
+     
       
     })
     .catch(error => console.error(error));
