@@ -4,18 +4,42 @@ let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
 // Fonction pour récupérer l'index de l'objet correspondant à l'élément sélectionné
 function getItemIndex(productId, color) {
   for (let i = 0; i < cartItems.length; i++) {
-    if (
-      cartItems[i].productId === productId &&
-      cartItems[i].color === color
-    ) {
+    if (cartItems[i].productId === productId && cartItems[i].color === color) {
       return i;
     }
   }
   return -1;
 }
+// Fonction pour mettre à jour le total des quantités dans l'interface
+function updateTotal() {
+  // Initialisation du total des quantités
+  let totalQuantity = 0;
+  let totalPrice = 0;
+
+  // Boucle sur les produits du panier pour mettre à jour le total des quantités et des prix
+  cartItems.forEach((item) => {
+    // Ajout de la quantité de chaque article au total des quantités
+    totalQuantity += item.quantity;
+    // Appel à l'API pour récupérer le prix de chaque article
+    fetch(`http://localhost:3000/api/products/${item.productId}`)
+      .then((response) => response.json())
+      .then((product) => {
+        const price = product.price;
+         // Calcul du prix total de chaque article en multipliant le prix par la quantité
+        const itemTotalPrice = price * item.quantity;
+        // Ajout du prix total de chaque article au prix total du panier
+        totalPrice += itemTotalPrice;
+        // Mettre à jour l'affichage du total des quantités dans l'interface
+        document.querySelector("#totalPrice").innerText = totalPrice;
+        document.querySelector("#totalQuantity").innerText = totalQuantity;
+      });
+  });
+
+  console.log(totalQuantity);
+}
 
 // Boucle sur les produits du panier pour les afficher
-cartItems.forEach(async (item) => {
+cartItems.forEach((item) => {
   // Récupérer les informations du produit depuis l'API
   fetch(`http://localhost:3000/api/products/${item.productId}`)
     .then((response) => response.json())
@@ -56,8 +80,8 @@ cartItems.forEach(async (item) => {
       const productQuantity = document.createElement("div");
       productQuantity.classList.add("cart__item__content__settings__quantity");
 
-      const quantity = document.createElement("p");
-      quantity.innerText = `Quantité : ${item.quantity}`;
+      const quantityText = document.createElement("p");
+      quantityText.innerText = `Quantité : ${item.quantity}`;
 
       const inputQuantity = document.createElement("input");
       inputQuantity.classList.add("itemQuantity");
@@ -81,7 +105,7 @@ cartItems.forEach(async (item) => {
       productContent.append(productDescription, productSettings);
       productDescription.append(productName, productPrice, productColor);
       productSettings.append(productQuantity, settingsDelete);
-      productQuantity.append(quantity, inputQuantity);
+      productQuantity.append(quantityText, inputQuantity);
       settingsDelete.appendChild(productDelete);
 
       // Ajout d'un événement pour détecter le changement de valeur de l'input
@@ -106,9 +130,11 @@ cartItems.forEach(async (item) => {
           // Ajouter la nouvelle quantité à la quantité déjà présente
           item.quantity = newQuantity;
           // Mettre à jour la quantité affichée dans l'interface
-          quantity.innerText = `Quantité : ${item.quantity}`;
+          quantityText.innerText = `Quantité : ${item.quantity}`;
           // Mettre à jour le localStorage avec la nouvelle quantité
           localStorage.setItem("cartItems", JSON.stringify(cartItems));
+          // Mettre à jour le total des quantités affiché dans l'interface
+          updateTotal();
         } else {
           // Afficher un message d'erreur si la nouvelle quantité n'est pas valide
           alert("La quantité doit être entre 0 et 100");
@@ -132,9 +158,13 @@ cartItems.forEach(async (item) => {
         // Mettre à jour le localStorage avec la nouvelle quantité
         localStorage.setItem("cartItems", JSON.stringify(cartItems));
         cartSection.removeChild(cartItem);
-      });
 
-      
+        // Mettre à jour le total des quantités affiché dans l'interface
+        updateTotal();
+      });
     })
     .catch((error) => console.error(error));
 });
+
+updateTotal();
+console.log(localStorage);
