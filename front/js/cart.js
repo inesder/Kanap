@@ -168,3 +168,47 @@ cartItems.forEach((item) => {
 
 updateTotal();
 console.log(localStorage);
+
+//formulaire
+
+const regexLetters = /^[a-zA-ZÀ-ÿ]+$/;
+const regexAddress = /^[a-zA-ZÀ-ÿ\s\d]+$/;
+const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+function validateInput(input, errorMsg, regex){
+  input.addEventListener('blur', function(){
+    if (regex.test(input.value)) {
+      errorMsg.innerText = ''; // Effacer le message d'erreur si l'input est valide
+    } else {
+      if (input.id === "address"){
+        errorMsg.innerText = 'Le champ ne peux que contenir des lettres, des chiffres et des espaces.'; // Message d'erreur pour l'adresse
+      }
+      else if (input.id === "email"){
+        errorMsg.innerText = 'Le champ doit être une adresse email valide.'; // Message d'erreur pour l'email
+      }
+      else {
+        errorMsg.innerText = 'Le champ ne doit contenir que des lettres.'; // Message d'erreur par défaut
+      }
+    }
+  });
+}
+
+const firstNameInput = document.querySelector("#firstName");
+const firstNameErrorMsg = document.querySelector("#firstNameErrorMsg");
+validateInput(firstNameInput, firstNameErrorMsg, regexLetters);
+
+const lastNameInput = document.querySelector("#lastName");
+const lastNameErrorMsg = document.querySelector("#lastNameErrorMsg");
+validateInput(lastNameInput, lastNameErrorMsg, regexLetters);
+
+const addressInput = document.querySelector("#address");
+const addressErrorMsg = document.querySelector("#addressErrorMsg");
+validateInput(addressInput, addressErrorMsg, regexAddress);
+
+const cityInput = document.querySelector("#city");
+const cityErrorMsg = document.querySelector("#cityErrorMsg");
+validateInput(cityInput, cityErrorMsg, regexLetters);
+
+const emailInput = document.querySelector("#email");
+const emailErrorMsg = document.querySelector("#emailErrorMsg");
+validateInput(emailInput, emailErrorMsg, regexEmail);
