@@ -218,11 +218,9 @@ fetch('http://localhost:3000/api/products/order', {
 })
 
 
-
-
 // création des regex
-const regexLetters = /^[a-zA-ZÀ-ÿ]+$/;
-const regexAddress = /^[a-zA-ZÀ-ÿ\s\d]+$/;
+const regexLetters = /^[a-zA-ZÀ-ÿ']+$/;
+const regexAddress = /^[a-zA-ZÀ-ÿ\s\d']+$/;
 const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 function validateInput(input, errorMsg, regex){
