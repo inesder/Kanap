@@ -171,6 +171,56 @@ console.log(localStorage);
 
 //formulaire
 
+// Sélectionner le formulaire
+const form = document.querySelector('.cart__order__form');
+form.addEventListener('submit', function(event) {
+  event.preventDefault(); // Empêcher le formulaire de se soumettre normalement
+  // Récupérer les données du formulaire
+const firstName = document.querySelector('#firstName').value;
+const lastName = document.querySelector('#lastName').value;
+const address = document.querySelector('#address').value;
+const city = document.querySelector('#city').value;
+const email = document.querySelector('#email').value;
+
+//créer un nouveau tableau contenant uniquement les ID de produit de chaque élément du panier
+const productIds = cartItems.map(item => item.productId);
+
+// Créer l'objet de contact
+const contact = {
+  firstName,
+  lastName,
+  address,
+  city,
+  email
+};
+// Créer l'objet de commande
+const order = {
+  contact,
+  products: productIds,
+  orderId: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+};
+// Envoyer la requête POST à l'API
+fetch('http://localhost:3000/api/products/order', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(order)
+})
+.then(response => response.json())
+.then(data => {
+  // Afficher le message de confirmation de commande
+  alert(`Commande enregistrée avec l'identifiant ${data.orderId}.`);
+})
+.catch(error => {
+  console.error(error);
+});
+})
+
+
+
+
+// création des regex
 const regexLetters = /^[a-zA-ZÀ-ÿ]+$/;
 const regexAddress = /^[a-zA-ZÀ-ÿ\s\d]+$/;
 const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -212,3 +262,6 @@ validateInput(cityInput, cityErrorMsg, regexLetters);
 const emailInput = document.querySelector("#email");
 const emailErrorMsg = document.querySelector("#emailErrorMsg");
 validateInput(emailInput, emailErrorMsg, regexEmail);
+
+
+
