@@ -209,8 +209,16 @@ fetch('http://localhost:3000/api/products/order', {
 })
 .then(response => response.json())
 .then(data => {
-  // Afficher le message de confirmation de commande
+  if (data && data.orderId){
+      // Afficher le message de confirmation de commande
   alert(`Commande enregistrée avec l'identifiant ${data.orderId}.`);
+  // Rediriger vers la page de confirmation avec le numéro de commande en paramètre de requête
+  window.location.href = `./confirmation.html?orderId=${data.orderId}`;
+} else {
+  // Afficher un message d'erreur si la réponse ne contient pas de numéro de commande
+  alert("Une erreur s'est produite lors de l'enregistrement de la commande.");
+}
+
 })
 .catch(error => {
   console.error(error);
@@ -262,10 +270,4 @@ const emailErrorMsg = document.querySelector("#emailErrorMsg");
 validateInput(emailInput, emailErrorMsg, regexEmail);
 
 
-// Redirection vers la page de confirmation 
 
-const orderButton = document.querySelector('#order');
-
-orderButton.addEventListener('click', function(){
-  window.location.href = './confirmation.html'
-})
