@@ -1,10 +1,10 @@
 // Envoie une requête à l'API pour récupérer la liste des produits
-fetch('http://localhost:3000/api/products')
-  .then(response => response.json()) // Convertit la réponse en JSON
-  .then(data => {
+fetch("http://localhost:3000/api/products")
+  .then((response) => response.json()) // Convertit la réponse en JSON
+  .then((data) => {
     displayProducts(data); // Appelle la fonction displayProducts avec les données récupérées
   })
-  .catch(error => console.error(error)); // Gère les erreurs
+  .catch((error) => console.error(error)); // Gère les erreurs
 
 // Fonction qui crée un élément HTML avec des attributs
 function displayProducts(canapes) {

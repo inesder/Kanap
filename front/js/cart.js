@@ -25,7 +25,7 @@ function updateTotal() {
       .then((response) => response.json())
       .then((product) => {
         const price = product.price;
-         // Calcul du prix total de chaque article en multipliant le prix par la quantité
+        // Calcul du prix total de chaque article en multipliant le prix par la quantité
         const itemTotalPrice = price * item.quantity;
         // Ajout du prix total de chaque article au prix total du panier
         totalPrice += itemTotalPrice;
@@ -172,78 +172,79 @@ console.log(localStorage);
 //formulaire
 
 // Sélectionner le formulaire
-const form = document.querySelector('.cart__order__form');
-form.addEventListener('submit', function(event) {
+const form = document.querySelector(".cart__order__form");
+form.addEventListener("submit", function (event) {
   event.preventDefault(); // Empêcher le formulaire de se soumettre normalement
   // Récupérer les données du formulaire
-const firstName = document.querySelector('#firstName').value;
-const lastName = document.querySelector('#lastName').value;
-const address = document.querySelector('#address').value;
-const city = document.querySelector('#city').value;
-const email = document.querySelector('#email').value;
+  const firstName = document.querySelector("#firstName").value;
+  const lastName = document.querySelector("#lastName").value;
+  const address = document.querySelector("#address").value;
+  const city = document.querySelector("#city").value;
+  const email = document.querySelector("#email").value;
 
-//créer un nouveau tableau contenant uniquement les ID de produit de chaque élément du panier
-const productIds = cartItems.map(item => item.productId);
+  //créer un nouveau tableau contenant uniquement les ID de produit de chaque élément du panier
+  const productIds = cartItems.map((item) => item.productId);
 
-// Créer l'objet de contact
-const contact = {
-  firstName,
-  lastName,
-  address,
-  city,
-  email
-};
-// Créer l'objet de commande
-const order = {
-  contact,
-  products: productIds,
-  orderId: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-};
-// Envoyer la requête POST à l'API
-fetch('http://localhost:3000/api/products/order', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(order)
-})
-.then(response => response.json())
-.then(data => {
-  if (data && data.orderId){
-      // Afficher le message de confirmation de commande
-  alert(`Commande enregistrée avec l'identifiant ${data.orderId}.`);
-  // Rediriger vers la page de confirmation avec le numéro de commande en paramètre de requête
-  window.location.href = `./confirmation.html?orderId=${data.orderId}`;
-} else {
-  // Afficher un message d'erreur si la réponse ne contient pas de numéro de commande
-  alert("Une erreur s'est produite lors de l'enregistrement de la commande.");
-}
-
-})
-.catch(error => {
-  console.error(error);
+  // Créer l'objet de contact
+  const contact = {
+    firstName,
+    lastName,
+    address,
+    city,
+    email,
+  };
+  // Créer l'objet de commande
+  const order = {
+    contact,
+    products: productIds,
+    orderId:
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15),
+  };
+  // Envoyer la requête POST à l'API
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(order),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data && data.orderId) {
+        // Afficher le message de confirmation de commande
+        alert(`Commande enregistrée avec l'identifiant ${data.orderId}.`);
+        // Rediriger vers la page de confirmation avec le numéro de commande en paramètre de requête
+        window.location.href = `./confirmation.html?orderId=${data.orderId}`;
+      } else {
+        // Afficher un message d'erreur si la réponse ne contient pas de numéro de commande
+        alert(
+          "Une erreur s'est produite lors de l'enregistrement de la commande."
+        );
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
-})
-
 
 // création des regex
 const regexLetters = /^[a-zA-ZÀ-ÿ']+$/;
 const regexAddress = /^[a-zA-ZÀ-ÿ\s\d']+$/;
 const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
-function validateInput(input, errorMsg, regex){
-  input.addEventListener('blur', function(){
+function validateInput(input, errorMsg, regex) {
+  input.addEventListener("blur", function () {
     if (regex.test(input.value)) {
-      errorMsg.innerText = ''; // Effacer le message d'erreur si l'input est valide
+      errorMsg.innerText = ""; // Effacer le message d'erreur si l'input est valide
     } else {
-      if (input.id === "address"){
-        errorMsg.innerText = 'Le champ ne peux que contenir des lettres, des chiffres et des espaces.'; // Message d'erreur pour l'adresse
-      }
-      else if (input.id === "email"){
-        errorMsg.innerText = 'Le champ doit être une adresse email valide.'; // Message d'erreur pour l'email
-      }
-      else {
-        errorMsg.innerText = 'Le champ ne doit contenir que des lettres.'; // Message d'erreur par défaut
+      if (input.id === "address") {
+        errorMsg.innerText =
+          "Le champ ne peux que contenir des lettres, des chiffres et des espaces."; // Message d'erreur pour l'adresse
+      } else if (input.id === "email") {
+        errorMsg.innerText = "Le champ doit être une adresse email valide."; // Message d'erreur pour l'email
+      } else {
+        errorMsg.innerText = "Le champ ne doit contenir que des lettres."; // Message d'erreur par défaut
       }
     }
   });
@@ -268,6 +269,3 @@ validateInput(cityInput, cityErrorMsg, regexLetters);
 const emailInput = document.querySelector("#email");
 const emailErrorMsg = document.querySelector("#emailErrorMsg");
 validateInput(emailInput, emailErrorMsg, regexEmail);
-
-
-
