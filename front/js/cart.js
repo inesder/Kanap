@@ -262,4 +262,10 @@ const emailErrorMsg = document.querySelector("#emailErrorMsg");
 validateInput(emailInput, emailErrorMsg, regexEmail);
 
 
+// Redirection vers la page de confirmation 
 
+const orderButton = document.querySelector('#order');
+
+orderButton.addEventListener('click', function(){
+  window.location.href = './confirmation.html'
+})
