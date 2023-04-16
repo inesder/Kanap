@@ -212,8 +212,6 @@ form.addEventListener("submit", function (event) {
     .then((response) => response.json())
     .then((data) => {
       if (data && data.orderId) {
-        // Afficher le message de confirmation de commande
-        alert(`Commande enregistrée avec l'identifiant ${data.orderId}.`);
         // Rediriger vers la page de confirmation avec le numéro de commande en paramètre de requête
         window.location.href = `./confirmation.html?orderId=${data.orderId}`;
       } else {
