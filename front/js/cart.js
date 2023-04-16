@@ -227,7 +227,7 @@ form.addEventListener("submit", function (event) {
 });
 
 // création des regex
-const regexLetters = /^[a-zA-ZÀ-ÿ']+$/;
+const regexLetters = /^[a-zA-ZÀ-ÿ\s']+$/;
 const regexAddress = /^[a-zA-ZÀ-ÿ\s\d']+$/;
 const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
