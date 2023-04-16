@@ -214,6 +214,7 @@ if (isValidFirstName && isValidLastName && isValidAddress && isValidCity && isVa
   const order = {
     contact,
     products: productIds,
+    // générer un numéro de commande
     orderId:
       Math.random().toString(36).substring(2, 15) +
       Math.random().toString(36).substring(2, 15),
@@ -237,13 +238,15 @@ if (isValidFirstName && isValidLastName && isValidAddress && isValidCity && isVa
       console.error(error);
     });
   }
+  // En cas d'erreur de saisie, une alerte d'erreur s'affiche
   else{
     alert("Formulaire invalide. Veuillez vérifier que toutes les données ont été saisies correctement et réessayer")
   }
 });
 
-
+//Fonction pour valider l'entrée des données de différents champs du formulaire
 function validateInput(input, errorMsg, regex) {
+  //Ajout d'un évènement 'blur' déclenché quand l'élément perd le focus
   input.addEventListener("blur", function () {
     if (regex.test(input.value)) {
       errorMsg.innerText = ""; // Effacer le message d'erreur si l'input est valide
@@ -260,22 +263,32 @@ function validateInput(input, errorMsg, regex) {
   });
 }
 
+// Sélection des éléments HTML pour le prénom et affichage de l'erreur
 const firstNameInput = document.querySelector("#firstName");
 const firstNameErrorMsg = document.querySelector("#firstNameErrorMsg");
+// Validation de l'entrée du prénom 
 validateInput(firstNameInput, firstNameErrorMsg, regexLetters);
 
+// Sélection des éléments HTML pour le nom et affichage de l'erreur
 const lastNameInput = document.querySelector("#lastName");
 const lastNameErrorMsg = document.querySelector("#lastNameErrorMsg");
+// Validation de l'entrée du nom 
 validateInput(lastNameInput, lastNameErrorMsg, regexLetters);
 
+// Sélection des éléments HTML pour l'adresse et affichage de l'erreur
 const addressInput = document.querySelector("#address");
 const addressErrorMsg = document.querySelector("#addressErrorMsg");
+// Validation de l'entrée de l'adresse 
 validateInput(addressInput, addressErrorMsg, regexAddress);
 
+// Sélection des éléments HTML pour la ville et affichage de l'erreur
 const cityInput = document.querySelector("#city");
 const cityErrorMsg = document.querySelector("#cityErrorMsg");
+// Validation de l'entrée de la ville 
 validateInput(cityInput, cityErrorMsg, regexLetters);
 
+// Sélection des éléments HTML pour l'email et affichage de l'erreur
 const emailInput = document.querySelector("#email");
 const emailErrorMsg = document.querySelector("#emailErrorMsg");
+// Validation de l'entrée de l'email 
 validateInput(emailInput, emailErrorMsg, regexEmail);
