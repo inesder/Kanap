@@ -173,6 +173,12 @@ console.log(localStorage);
 
 // Sélectionner le formulaire
 const form = document.querySelector(".cart__order__form");
+
+  // création des regex
+  const regexLetters = /^[a-zA-ZÀ-ÿ\s']+$/;
+  const regexAddress = /^[a-zA-ZÀ-ÿ\s\d']+$/;
+  const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  
 form.addEventListener("submit", function (event) {
   event.preventDefault(); // Empêcher le formulaire de se soumettre normalement
   // Récupérer les données du formulaire
@@ -181,6 +187,17 @@ form.addEventListener("submit", function (event) {
   const address = document.querySelector("#address").value;
   const city = document.querySelector("#city").value;
   const email = document.querySelector("#email").value;
+
+// Valider chaque champ de saisie avec l'expression régulière correspondante
+const isValidFirstName = regexLetters.test(firstName);
+const isValidLastName = regexLetters.test(lastName);
+const isValidAddress = regexAddress.test(address);
+const isValidCity = regexLetters.test(city);
+const isValidEmail = regexEmail.test(email);
+
+
+// Si tous les champs sont valides, envoyer le formulaire
+if (isValidFirstName && isValidLastName && isValidAddress && isValidCity && isValidEmail) {
 
   //créer un nouveau tableau contenant uniquement les ID de produit de chaque élément du panier
   const productIds = cartItems.map((item) => item.productId);
@@ -214,22 +231,17 @@ form.addEventListener("submit", function (event) {
       if (data && data.orderId) {
         // Rediriger vers la page de confirmation avec le numéro de commande en paramètre de requête
         window.location.href = `./confirmation.html?orderId=${data.orderId}`;
-      } else {
-        // Afficher un message d'erreur si la réponse ne contient pas de numéro de commande
-        alert(
-          "Une erreur s'est produite lors de l'enregistrement de la commande."
-        );
-      }
+      } 
     })
     .catch((error) => {
       console.error(error);
     });
+  }
+  else{
+    alert("Formulaire invalide. Veuillez vérifier que toutes les données ont été saisies correctement et réessayer")
+  }
 });
 
-// création des regex
-const regexLetters = /^[a-zA-ZÀ-ÿ\s']+$/;
-const regexAddress = /^[a-zA-ZÀ-ÿ\s\d']+$/;
-const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 function validateInput(input, errorMsg, regex) {
   input.addEventListener("blur", function () {
